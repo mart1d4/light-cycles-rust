@@ -1,34 +1,88 @@
+#[derive(PartialEq, Clone)]
 pub enum Color {
     Black,
+    White,
     Red,
+    Green,
+    Blue,
     Yellow,
+    Magenta,
+    Cyan,
 }
 
+#[derive(Clone)]
+pub struct Place {
+    pub row: usize,
+    pub col: usize,
+}
+
+#[derive(Clone)]
 pub struct User {
     username: String,
-    color: String,
+    color: Color,
     symbol: char,
+
+    place: Place,
+    boosts: u8,
+    has_lost: bool,
 
     is_bot: bool,
 }
 
 impl User {
-    pub fn new(username: &str, color: Color, symbol: char, is_bot: bool) -> Result<User, &'static str> {
-        let color_string = get_color(color).unwrap();
-
-        Ok(User {
-            username: username.to_string(),
-            color: color_string,
+    pub fn new(username: String, color: Color, symbol: char, is_bot: bool) -> User {
+        User {
+            username,
+            color,
             symbol,
+            place: Place { row: 0, col: 0 },
+            boosts: 0,
+            has_lost: false,
             is_bot,
-        })
+        }
     }
 
-}
+    pub fn username(&self) -> String {
+        self.username.clone()
+    }
 
-fn get_color(color: Color) -> Result<String, &'static str> {
-    match color {
-        Color::Red => Ok("#FF0000".to_string()),
-        _ => Err("Wrong color")
+    pub fn color(&self) -> Color {
+        self.color.clone()
+    }
+
+    pub fn symbol(&self) -> char {
+        self.symbol
+    }
+
+    pub fn is_bot(&self) -> bool {
+        self.is_bot
+    }
+
+    pub fn place(&self) -> Place {
+        self.place.clone()
+    }
+
+    pub fn set_place(&mut self, place: Place) {
+        self.place = place;
+    }
+
+    pub fn has_lost(&self) -> bool {
+        self.has_lost
+    }
+
+    pub fn set_has_lost(&mut self, has_lost: bool) {
+        self.has_lost = has_lost;
+    }
+
+    pub fn boosts(&self) -> u8 {
+        self.boosts
+    }
+
+    pub fn add_boost(&mut self) {
+        self.boosts += 1;
+    }
+
+    pub fn remove_boost(&mut self) {
+        self.boosts -= 1;
     }
 }
